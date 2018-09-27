@@ -1,0 +1,28 @@
+
+.col-sm {
+    display: inline-block;
+    margin-bottom: 50px;
+    border: 1px solid;
+    vertical-align: top;
+    overflow: hidden;
+    width:100%;
+    height:auto;
+}
+
+.col-sm img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.col-sm h3{
+    font-size:12px;
+    padding:10px;
+}
+
+@media screen and (min-width: 450px) {
+    .col-sm{
+        width: 30%;
+        height: 175px;
+    }
+  }
