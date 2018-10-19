@@ -1,0 +1,139 @@
+/* CSS Main Menu */
+nav, .navmenu, #menu, {
+    all:unset !important;
+
+}
+
+.navmenu{
+    width:100%;
+    background:#303030;
+    display:inline-block
+}
+ #menu{
+    color:#fff;
+    font-size:18px;
+    position:relative;
+    top:5px;
+    font-weight:500;
+    cursor:pointer;
+    padding-left:10px;
+    line-height:2.2em
+}
+ #menu a{
+    text-decoration:none
+}
+ nav{
+    display:none
+}
+ nav ul{
+    list-style-type:none;
+    padding-left:0;
+    font-size:0;
+    background-color:#303030
+}
+ nav li{
+    display:block;
+    font-size:16px;
+    color:white
+}
+ ul.navbar>li>a{
+    color:#fff
+}
+ ul.navbar>li>a:hover{
+    color:red
+}
+ nav a{
+    display:block;
+    padding:10px;
+    text-decoration:none;
+    color:inherit
+}
+/*==Dropdown Menu==*/
+ .sub-menu li{
+    list-style-type:none;
+    display:inline-block
+}
+ ul.navbar li ul.sub-menu{
+    display:none;
+    position:absolute
+}
+ ul.navbar li{
+    position:relative
+}
+ ul.navbar li:hover ul.sub-menu{
+    display:block
+}
+ .sub-menu li{
+    margin-left:0!important
+}
+ ul.sub-menu>li>a{
+    color:#fff
+}
+ ul.sub-menu>li>a:hover{
+    color:red
+}
+ @media screen and (max-width:720px){
+    nav ul{
+        width:100%!important
+    }
+    #sub-menu{
+        display:none
+    }
+     nav a{
+        padding:5px 10px
+    }
+}
+ @media screen and (min-width:720px){
+    #menu{
+        display:none
+    }
+    nav{
+        display:block!important
+    }
+    nav li{
+        display:inline-block
+    }
+}
+/*----- Search -----*/
+ #search-form{
+    display:inline-block;
+    padding-top:4px;
+    padding-right:5px;
+    float:right
+}
+ #search-form input{
+    width:200px;
+    height:30px;
+    padding:0 8px;
+    float:left;
+    border-radius:2px 0 0 2px;
+    font-size:13px;
+    margin:0;
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    box-sizing:border-box;
+    border:0;
+    font-size:100%;
+    font:inherit
+}
+ #button-submit{
+    width:auto!important;
+    height:30px;
+    padding:0 8px;
+    float:right;
+    border-radius:0 2px 2px 0;
+    background:#66a992;
+    font-size:13px;
+    font-weight:600;
+    text-shadow:0 1px 0 rgba(0,0,0,0.3);
+    color:#fff
+}
+ @media screen and (max-width:480px){
+    .toggle-nav{
+        padding:6px 10px
+    }
+    #search-form input{
+        width:150px
+    }
+}
+/* <----Finish menu */

@@ -6,7 +6,8 @@ var bcrypt   = require('bcrypt-nodejs');
 var articleSchema = mongoose.Schema({
     headerText:String,
     headerImage:String,
-    userId:String
+    userId:String,
+    articleUrl:String
   
 });
 

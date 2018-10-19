@@ -1,3 +1,27 @@
+body,html{
+    overflow-x: hidden;
+    background: #47b4ea;
+    word-wrap: break-word;
+}
+
+
+#header-col > h1{
+    margin:auto;
+    display:inline;
+    font-family: 'Permanent Marker', cursive;
+  }
+  
+header{
+    background-color: #ffffff;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+.brain-icon{
+    display:inline;
+    font-size:30px;
+    padding:7px;
+}
 
 .col-sm {
     display: inline-block;
