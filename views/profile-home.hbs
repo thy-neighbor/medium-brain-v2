@@ -1,0 +1,29 @@
+
+<div class="container">
+
+    <div class="container">
+        <br>
+        <h2>Liked article content</h2>
+        <p>All the articles added to your liked collection, each training Medium's Brain to understand what you think is cool or boring</p>
+        <p>Use the search bar to find medium articles and add more to the collection</p>
+        <br>
+        {{#each articles as |article index|}}
+            {{#ifIsNthItem nth=3 }}
+                <div class="row">
+            {{/ifIsNthItem}}
+
+            <div class="col-sm">
+                <a href={{this.articleUrl}}>
+                    <h3>{{this.headerText}}</h3>
+                    <img src={{this.headerImage}} />
+                </a>
+            </div> 
+            
+            {{#ifIsNthItem nth=3 }}
+                </div>
+            {{/ifIsNthItem}}
+
+        {{/each}}
+    </div>
+</div>
+

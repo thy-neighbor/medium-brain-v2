@@ -5,8 +5,8 @@
         <h1><span class="fa fa-anchor"></span> User Profile Page</h1>
         <a href="/logout" class="btn btn-default btn-sm">Logout</a>
     </div>
-
-    <div class="row">
+    <br>
+    <div class="container">
 
         <!-- LOCAL INFORMATION -->
         <div class="col-sm-6">
@@ -27,7 +27,7 @@
 
             </div>
         </div>
-
+        <br>
         <!-- GOOGLE INFORMATION -->
         <div class="col-sm-6">
             <div class="well">
@@ -49,29 +49,5 @@
             </div>
         </div>
     </div>
-
-    <div class="container">
-        <h2>Liked article content</h2>
-        
-        {{#each articles as |article index|}}
-            {{#ifIsNthItem nth=3 }}
-                <div class="row">
-            {{/ifIsNthItem}}
-
-            <div class="col-sm">
-                <a href={{this.articleUrl}}>
-                    <h3>{{this.headerText}}</h3>
-                    <img src={{this.headerImage}} />
-                </a>
-            </div> 
-            
-            {{#ifIsNthItem nth=3 }}
-                </div>
-            {{/ifIsNthItem}}
-
-        {{/each}}
-
-    </div>
-
 </div>
 

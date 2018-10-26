@@ -1,7 +1,14 @@
 /* CSS Main Menu */
-nav, .navmenu, #menu, {
+nav, .navmenu, #menu {
     all:unset !important;
 
+}
+
+#brain-logo{
+    all:unset !important;
+    vertical-align: middle;
+    border-style: none;
+    width:50px;
 }
 
 .navmenu{

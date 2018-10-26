@@ -7,8 +7,8 @@ var articleSchema = mongoose.Schema({
     headerText:String,
     headerImage:String,
     userId:String,
-    articleUrl:String
-  
+    articleUrl:String,
+    like:Number
 });
 
 
