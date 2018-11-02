@@ -6,7 +6,7 @@ $(".like-btn-js").click(function(){// changed to id instead
     let headerImage=$(this).parent().find("img")[0].src;
     let articleUrl=$(this).parent().find("a").attr("href");
 
-    $.post("/article",{headerText:headerText,headerImage:headerImage,articleUrl:articleUrl,like:1},function(res){
+    $.post("/article",{input:headerText,headerImage:headerImage,articleUrl:articleUrl,output:{like:1}},function(res){
         console.log(res);
     });
 });
@@ -18,7 +18,7 @@ $(".dislike-btn-js").click(function(){// changed to id instead
     let headerImage=$(this).parent().find("img")[0].src;
     let articleUrl=$(this).parent().find("a").attr("href");
 
-    $.post("/article",{headerText:headerText,headerImage:headerImage,articleUrl:articleUrl,like:0},function(res){
+    $.post("/article",{input:headerText,headerImage:headerImage,articleUrl:articleUrl,output:{dislike:1}},function(res){
         console.log(res);
     });
 });
