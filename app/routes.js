@@ -241,6 +241,10 @@ function train(data) {
 };
 
 
+
+
+
+
 /*
 var promise1 = new Promise(function(resolve, reject) {
     console.log("promise1")
