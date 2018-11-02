@@ -5,129 +5,43 @@ const Article= require('./models/article');
 var request = require('request');
 var cheerio = require('cheerio');
 
-const trainingData = [
-    {
-        input: "So true, thank you!",
-        output: { dislike: 1 }
-    },{
-        input: "Inside Chi's nursery", 
-        output: { like: 1 }
-    },{
-        input: "Why I dyed my hair pink",
-        output: { like: 1 }
-    }
-]
 
-let trainedNet;
-
-function encode(arg) {
-    return arg.split('').map(x => (x.charCodeAt(0) / 256));
-}
-
-function processTrainingData(data) {
-    return data.map(d => {
-        let output;
-        if(d.like==1){output={like:1}}
-        else{output={dislike:1}}
-        return {
-            input: encode(d.input),
-            output: output
-        }
-    })
-}
-
-function train(data) {
-    let net = new brain.NeuralNetwork();
-    net.train(processTrainingData(data));
-    trainedNet = net.toFunction();
-};
-
-function execute(input) {
-    let results = trainedNet(encode(input));
-    console.log(results)
-    let output;
-    let certainty;
-    if (results.dislike > results.like) {
-        output = 'Donald dislike'
-        certainty = Math.floor(results.dislike * 100)
-    } else { 
-        output = 'Kim like'
-        certainty = Math.floor(results.like * 100)
-    }
-
-    return "I'm " + certainty + "% sure that tweet was written by " + output;
-}
-
-//train(trainingData);
-
-//let statement=["Why I dyed my hair pink","Make America Great Again","'Congressman Schiff omitted and distorted key facts' @FoxNews  So, what else is new. He is a total phony!"]
+    
 
 
-//for(let i=0;i<3;i++){
-    //console.log(execute(statement[i]));
-//}
 
 
 module.exports = function(app, passport) {
-   
-    app.get('/medium',isLoggedIn,async function(req,res){ 
+
+    app.get('/medium', isLoggedIn, async function(req,res){ 
         console.log(req.query, req.params);
+        
+        
         let articles=await Article.find({
             userId:req.user._id
         }).exec();
-        if(articles.length>0){
-                trainAsync(articles).then(res=>{
-                console.log("RES",res);
-                request(`https://medium.com/search?q=${req.query.q}`, function(err, resp, html) {
-            console.log(err);
+      
+        request(`https://medium.com/search?q=${req.query.q}`, async function(err, resp, html) {
+        console.log(err);
             if (!err){
                 const $ = cheerio.load(html);
                 
-                if(articles.length>0){
-                    $('.section-inner').each(function(e){
-                        let text=$(this).find('h3').text();
-                        console.log("TEXT",text);
-                        let results=execute(text);
-                        //let results={like:Math.random()}
-                        if(!isNaN(results.like)){
-                            //$(this).append(`<div>${Math.floor(results.like*100)}%</div>`);
-                            $(this).append(`<div>${results.like}%</div>`);
-                        } else { 
-                            $(this).append(`<div class="calculation">No calculation available</div>`);
-                        }
-                        
-                        //console.log(this);
-                        console.log($(this).find('h3').text());
-                        console.log(results);
-                    
-                    }); 
-                }                
                 
                 let temp=$('.postArticle-content').append(`<br>
                 <button class="like-btn-js">Like me</button>
                 <button class="dislike-btn-js">Hate me</button>
                 `);
-                
-
-                
-                
-                //let section=$('.postArticle-content');
                 let section=`<h1 class="medium-search-results-title">Medium Search Results</h1><br> ${$('.postArticle-content')}`;
                 
                 
                 
                 $.html();
-                //console.log(section.html());
                 res.render('medium.hbs', {
                     html:section
                 });
             }
-        });
-            });
-            console.log('ARTICLES', articles);
-            
-        } 
-        
+       });
+                   
 
     });
 
