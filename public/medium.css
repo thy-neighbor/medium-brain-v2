@@ -29,3 +29,13 @@ h2:hover{
 .medium-search-results-title{
     text-align:center;
 }
+
+
+.article-content {
+    border: 0.5px solid black;
+    padding: 50px;
+}
+
+.edit img{
+    width:100%;
+}
