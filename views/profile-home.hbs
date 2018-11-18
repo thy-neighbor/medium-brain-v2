@@ -14,7 +14,8 @@
 
             <div class="col-sm" >
                 <i class="fas fa-times delete-btn" data-id={{this._id}} ></i>
-                <a href={{this.articleUrl}}>
+            <!--<a href={{this.articleUrl}}>-->
+                <a href="/article?q={{this.articleUrl}}">
                     <h3>{{this.headerText}}</h3>
                     <img src={{this.headerImage}} />
                 </a>

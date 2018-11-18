@@ -37,8 +37,11 @@ module.exports = function(app, passport) {
 
     });
 
-    app.get('/article',function(req,res){
+    app.get('/article-edit',isLoggedIn, function(req,res){
         console.log("IM HERREE",req.query.q);
+        //check if theres already content for this article
+        //if s load that content
+        //else do the request below
         request(`${req.query.q}`, async function(err, resp, html) {
             console.log('ERROR',err);
             if (!err){
@@ -64,36 +67,105 @@ module.exports = function(app, passport) {
 
     });//app.get
 
+    app.get('/article',isLoggedIn, async function(req,res){
+        console.log("IM HERREE",req.query.q);
+        //check if theres already content for this article
+        //if s load that content
+        //else do the request below
+       
+        let articles=await Article.find({
+            userId:req.user._id
+        }).exec();
+
+        let tempBody=await articles.find(function(item){
+            if(item.articleUrl==req.query.q){
+                return item;
+            }
+        });
+
+        console.log("GOOD CONTENT",tempBody.articleContent);
+            
+        res.render('article-edit.hbs', {
+            //tempHeader:tempHeader,
+            tempBody:tempBody.articleContent,
+            originalUrl:tempBody.articleUrl
+        });
+       
+    });//app.get
+
     app.post('/medium',isLoggedIn,function(req,res){
         res.redirect(`/medium?q=${req.body.q}`);
     });
 
     app.post('/article',isLoggedIn,async function(req,res){
         console.log('article',req.body,req.user);
-/*
+
+        let msg="";
+
         let articles=await Article.find({
             userId:req.user._id
         }).exec();
-*/
-        
-        if(req.body.edit==1){
 
-            return res.redirect(`/article-edit?q=${req.body.articleUrl}`);
-            
-        }//if            
+        let articleResult=await articles.find(function(item){
+            if(item.articleUrl==req.body.articleUrl){
+                return item;
+            }
+        });
+
+        console.log("ARTICLE ID: IF FOUND IS-->",articleResult);
+
+        //Model.update(query, { $set: { name: 'jason bourne' }}, options, callback)
+
+        if(articleResult){
+            msg=await Article.findByIdAndRemove(articleResult._id, (err, article) => {
+                // As always, handle any potential errors:
+                if (err) return err;
+                // We'll create a simple object to send back with a message and the id of the document that was removed
+                // You can really do this however you want, though.
+                const response = {
+                    message: "Article successfully deleted",
+                    id: articleResult._id
+                };
+                return response;
+            });//(err,article)            
+        }//if
+          
         
 
-        console.log("IM HERREE");
+        console.log("IM HERREE--> Line 101", msg);
+
 
         let article=new Article(req.body);
         article.userId=req.user._id;
-        article.save(function(err){
-            if(err){ throw err }
-            if(req.body.edit==0){
-                res.json({success:true})
-            } 
+
+        var promise= new Promise(function(resolve,reject){
+            if(article.edit==0){
+                request(`${req.body.articleUrl}`, async function(err, resp, html) {
+                    console.log('ERROR',err);
+                    if (!err){
+                        
+                        const $ = cheerio.load(html);
+                        
+                        //let tempHeader=$('.elevateCover');
+                        $(".section-inner").attr("contenteditable","true");
+                        article.articleContent= await $('.section-inner').html();
+                        //let simple=$('.section-inner').html();
+                        console.log('SAVED THIS INTO ARTICLECONTENT',article.articleContent);
+                        resolve(1);
+                    }//if
+                });//request            
+            }//if
             
-        });//article save
+            
+        }).then(function(response){
+            console.log('SAVED THIS INTO ARTICLECONTENT OUSSIDE',article.articleContent);
+
+            article.save(function(err){
+                if(err){ throw err }
+                res.json({success:true})     
+                
+            });//article save
+        });       
 
 
     });//post

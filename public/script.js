@@ -15,11 +15,11 @@ $(".edit-btn-js").click(function(){// changed to id instead
     window.t=this;
     console.log("EDIT BUTTON CLICKED, WE MADE IT");
     let articleUrl=$(this).parent().find("a").attr("href");
-    
-    //let headerText=$(this).parent().find("h3").text();
-    //let headerImage=$(this).parent().find("img")[0].src;
+    let headerText=$(this).parent().find("h3").text();
+    let headerImage=$(this).parent().find("img")[0].src;
 
-    window.location.href = window.location.origin + `/article?q=${articleUrl}`;
+
+    window.location.href = window.location.origin + `/article-edit?q=${articleUrl}`;
 
  /*   $.get(`/article?q=${articleUrl}`,function(res){
         console.log(res);
@@ -27,12 +27,25 @@ $(".edit-btn-js").click(function(){// changed to id instead
 */
 });
 
-$(".save-btn-js").click(function(){
+$(".save-changes-btn-js").click(function(){
+    //window.t=this;
+    console.log("SAVE CHANGES BUTTON CLICKED, WE MADE IT");
+    let articleContent=$(this).parent().find("div").html();
+    let articleUrl=$(this).parent().find("a").attr("href");
+    let headerText=$(this).parent().find("h1").text();
+    let headerImage=$(this).parent().find("img")[0].src;
+    //actually go get header text and stuff on this page
+    //do post operation and in post op we check if the url exists in the array and if so we replace the body
+    //else we add the new article
+    $.post("/article-edit",{headerText:headerText,headerImage:headerImage,articleUrl:articleUrl,articleContent:articleContent,like:1,edit:1},function(res){
+        
+    });
+
 
 });
 
-$(".discard-btn-js").click(function(){
-    
+$(".discard-changes-btn-js").click(function(){
+    history.back();
 });
 
 
