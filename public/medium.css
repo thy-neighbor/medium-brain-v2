@@ -1,4 +1,4 @@
-
+/*CSS For Medium Results*/
 .postArticle-content {
     border: 0.5px solid black;
     max-height: 1000px;
@@ -37,5 +37,7 @@ h2:hover{
 }
 
 .edit img{
-    width:100%;
+    width:35%;
+    height:auto;
+    border:0.1px solid rgb(221, 221, 221);
 }

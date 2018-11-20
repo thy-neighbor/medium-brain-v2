@@ -49,8 +49,8 @@ module.exports = function(app, passport) {
                 const $ = cheerio.load(html);
                 
                 //let tempHeader=$('.elevateCover');
-                $(".section-inner").attr("contenteditable","true");
-                let tempBody=$('.section-inner').html();
+                $(".postArticle-content").attr("contenteditable","true");
+                let tempBody=$('.postArticle-content').html();
                 //let simple=$('.section-inner').html();
                 console.log('ALL OF THAT GOOD CONTENT',tempBody);
 
@@ -147,8 +147,8 @@ module.exports = function(app, passport) {
                         const $ = cheerio.load(html);
                         
                         //let tempHeader=$('.elevateCover');
-                        $(".section-inner").attr("contenteditable","true");
-                        article.articleContent= await $('.section-inner').html();
+                        $(".postArticle-content").attr("contenteditable","true");
+                        article.articleContent= await $('.postArticle-content').html();
                         //let simple=$('.section-inner').html();
                         console.log('SAVED THIS INTO ARTICLECONTENT',article.articleContent);
                         resolve(1);
