@@ -126,7 +126,7 @@ module.exports = function(app, passport) {
                     message: "Article successfully deleted",
                     id: articleResult._id
                 };
-                return response;
+                //return response;
             });//(err,article)            
         }//if
           
@@ -169,6 +169,19 @@ module.exports = function(app, passport) {
 
 
     });//post
+
+    app.post('/update',isLoggedIn,function(req,res){
+        console.log('update',req.body,req.user);
+         Article.findOne({headerText: req.body.headerText}, function (err, art) {
+            art.articleContent=req.body.articleContent;
+            art.save(function (err) {
+                if(err) {
+                    console.error('ERROR!');
+                }
+            });
+        }); 
+        
+    });
 
     app.post('/delete',isLoggedIn,function(req,res){
         console.log("DELETE",req.body);

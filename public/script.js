@@ -18,7 +18,7 @@ $(".edit-btn-js").click(function(){// changed to id instead
     let headerText=$(this).parent().find("h3").text();
     let headerImage=$(this).parent().find("img")[0].src;
 
-
+    //doesn't work for header texts and header image!!!!
     window.location.href = window.location.origin + `/article-edit?q=${articleUrl}`;
 
  /*   $.get(`/article?q=${articleUrl}`,function(res){
@@ -37,7 +37,7 @@ $(".save-changes-btn-js").click(function(){
     //actually go get header text and stuff on this page
     //do post operation and in post op we check if the url exists in the array and if so we replace the body
     //else we add the new article
-    $.post("/article-edit",{headerText:headerText,headerImage:headerImage,articleUrl:articleUrl,articleContent:articleContent,like:1,edit:1},function(res){
+    $.post("/update",{headerText:headerText,headerImage:headerImage,articleUrl:articleUrl,articleContent:articleContent,like:1,edit:1},function(res){
         
     });
 
