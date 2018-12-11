@@ -7,7 +7,7 @@ var cheerio = require('cheerio');
 
 
 module.exports = function(app, passport) {
-   
+    //get the results from medium.com's search
     app.get('/medium', isLoggedIn, async function(req,res){ 
         console.log(req.query, req.params);
         
@@ -37,6 +37,7 @@ module.exports = function(app, passport) {
 
     });
 
+    //article editing page, render what is saved in user's database
     app.get('/article-edit',isLoggedIn, function(req,res){
         console.log("IM HERREE",req.query.q);
         //check if theres already content for this article
@@ -50,21 +51,9 @@ module.exports = function(app, passport) {
                 let header=$('.postArticle-content').find('h1').text();
                 let headerImg=$('.postArticle-content').find('img.graf-image').attr("src");
 
-                //let tempHeader=$('.elevateCover');
-                //$(".postArticle-content").attr("contenteditable","true");
                 let tempBody=$('.postArticle-content').html();
-                
-/*                 tempBody=`
-                    <section class="article-edit" t="${header}" hi="${headerImg}">
-                        ${tempBody}
-                    </section>
-                    `; 
-*/
-                //let simple=$('.section-inner').html();
-                console.log('ALL OF THAT GOOD CONTENT',header, headerImg);
 
-                //let section=`${tempHeader}<br>${tempBody}`;
-                //BEFORE YOU FORGET, you can save it in the html, section header
+                console.log('ALL OF THAT GOOD CONTENT',header, headerImg);
                 
                 $.html();
                 res.render('article-edit.hbs', {
@@ -78,6 +67,7 @@ module.exports = function(app, passport) {
 
     });//app.get
 
+    //Make the article-edit page from main article list
     app.get('/article',isLoggedIn, async function(req,res){
         console.log("IM HERREE",req.query.q);
         //check if theres already content for this article
@@ -102,12 +92,15 @@ module.exports = function(app, passport) {
             tempBody:tempBody.articleContent,
             originalUrl:tempBody.articleUrl
         });
-    });//app.get
+    });//app.get 
 
+
+    //redirects with the query for the medium article search
     app.post('/medium',isLoggedIn,function(req,res){
         res.redirect(`/medium?q=${req.body.q}`);
     });
 
+    //Saving article from search list(checks to see if article was saved previously, if so deletes then rewrites)
     app.post('/article',isLoggedIn,async function(req,res){
         console.log('article',req.body,req.user);
 
@@ -125,25 +118,21 @@ module.exports = function(app, passport) {
 
         console.log("ARTICLE ID: IF FOUND IS-->",articleResult);
 
-        //Model.update(query, { $set: { name: 'jason bourne' }}, options, callback)
-
         if(articleResult){
             msg=await Article.findByIdAndRemove(articleResult._id, (err, article) => {
-                // As always, handle any potential errors:
+                //handle any potential errors:
                 if (err) return err;
                 // We'll create a simple object to send back with a message and the id of the document that was removed
-                // You can really do this however you want, though.
+                
                 const response = {
                     message: "Article successfully deleted",
                     id: articleResult._id
                 };
-                //return response;
+                
             });//(err,article)            
         }//if
           
-        
-
-        console.log("IM HERREE--> Line 101", msg);
+        console.log("IM HERREE--> Line 134", msg);
 
 
         let article=new Article(req.body);
@@ -157,10 +146,10 @@ module.exports = function(app, passport) {
                         
                         const $ = cheerio.load(html);
                         
-                        //let tempHeader=$('.elevateCover');
+                        
                         $(".postArticle-content").attr("contenteditable","true");
                         article.articleContent= await $('.postArticle-content').html();
-                        //let simple=$('.section-inner').html();
+                        
                         console.log('SAVED THIS INTO ARTICLECONTENT',article.articleContent);
                         resolve(1);
                     }//if
@@ -181,6 +170,7 @@ module.exports = function(app, passport) {
 
     });//post
 
+    //saves edited articles, with delete if found in database, then rewrite method
     app.post("/article-edit", isLoggedIn, async function(req,res){
         console.log('article-edit', req.body, req.user);
 
@@ -198,14 +188,13 @@ module.exports = function(app, passport) {
 
         console.log("ARTICLE ID: IF FOUND IS-->",articleResult);
 
-        //Model.update(query, { $set: { name: 'jason bourne' }}, options, callback)
+        
 
         if(articleResult){
             msg=await Article.findByIdAndRemove(articleResult._id, (err, article) => {
-                // As always, handle any potential errors:
+                //handle any potential errors:
                 if (err) return err;
                 // We'll create a simple object to send back with a message and the id of the document that was removed
-                // You can really do this however you want, though.
                 const response = {
                     message: "Article successfully deleted",
                     id: articleResult._id
@@ -228,6 +217,7 @@ module.exports = function(app, passport) {
 
     });//app.post(/article-edit)
 
+    //Not needed for current version, but keep for future versions
     app.post('/update',isLoggedIn,function(req,res){
         console.log('update',req.body,req.user);
          Article.findOne({headerText: req.body.headerText}, function (err, art) {
@@ -241,6 +231,7 @@ module.exports = function(app, passport) {
         
     });
 
+    //Delete the article from the database using the id
     app.post('/delete',isLoggedIn,function(req,res){
         console.log("DELETE",req.body);
         Article.remove({_id:req.body.id}).exec().then(function(){
