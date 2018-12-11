@@ -3,7 +3,7 @@
 
     <div class="container" id="profile-home">
         <br>
-        <h2>Liked article content</h2>
+        <h2>Liked Article Content</h2>
         <p>All the articles added to your liked collection, each can be edited as you please</p>
         <p>Use the search bar to find medium articles and add more to the collection</p>
         <br>
@@ -14,8 +14,7 @@
 
             <div class="col-sm" >
                 <i class="fas fa-times delete-btn" data-id={{this._id}} ></i>
-            <!--<a href={{this.articleUrl}}>-->
-                <a href="/article?q={{this.articleUrl}}">
+                <a href="/article?q={{this.articleUrl}}">   
                     <h3>{{this.headerText}}</h3>
                     <img src={{this.headerImage}} />
                 </a>
@@ -24,8 +23,10 @@
             {{#ifIsNthItem nth=3 }}
                 </div>
             {{/ifIsNthItem}}
-
         {{/each}}
+    </div>
+    <div class="fake-footer">
+        <p>Warning! Any altercations to the title or thumbnail image will only change in the article, not the homepage list, thank you :-)</p>
     </div>
 </div>
 

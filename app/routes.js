@@ -47,18 +47,29 @@ module.exports = function(app, passport) {
             if (!err){
                 
                 const $ = cheerio.load(html);
-                
+                let header=$('.postArticle-content').find('h1').text();
+                let headerImg=$('.postArticle-content').find('img.graf-image').attr("src");
+
                 //let tempHeader=$('.elevateCover');
-                $(".postArticle-content").attr("contenteditable","true");
+                //$(".postArticle-content").attr("contenteditable","true");
                 let tempBody=$('.postArticle-content').html();
+                
+/*                 tempBody=`
+                    <section class="article-edit" t="${header}" hi="${headerImg}">
+                        ${tempBody}
+                    </section>
+                    `; 
+*/
                 //let simple=$('.section-inner').html();
-                console.log('ALL OF THAT GOOD CONTENT',tempBody);
+                console.log('ALL OF THAT GOOD CONTENT',header, headerImg);
 
                 //let section=`${tempHeader}<br>${tempBody}`;
+                //BEFORE YOU FORGET, you can save it in the html, section header
                 
                 $.html();
                 res.render('article-edit.hbs', {
-                    //tempHeader:tempHeader,
+                    headerText:header,      //works
+                    headerImg:headerImg,       //works
                     tempBody:tempBody,
                     originalUrl:req.query.q
                 });
@@ -86,11 +97,11 @@ module.exports = function(app, passport) {
         console.log("GOOD CONTENT",tempBody.articleContent);
             
         res.render('article-edit.hbs', {
-            //tempHeader:tempHeader,
+            headerText:tempBody.headerText,      //works
+            headerImg:tempBody.headerImage,       //works
             tempBody:tempBody.articleContent,
             originalUrl:tempBody.articleUrl
         });
-       
     });//app.get
 
     app.post('/medium',isLoggedIn,function(req,res){
@@ -169,6 +180,53 @@ module.exports = function(app, passport) {
 
 
     });//post
+
+    app.post("/article-edit", isLoggedIn, async function(req,res){
+        console.log('article-edit', req.body, req.user);
+
+        let msg="";
+
+        let articles=await Article.find({
+            userId:req.user._id
+        }).exec();
+
+        let articleResult=await articles.find(function(item){
+            if(item.articleUrl==req.body.articleUrl){
+                return item;
+            }
+        });
+
+        console.log("ARTICLE ID: IF FOUND IS-->",articleResult);
+
+        //Model.update(query, { $set: { name: 'jason bourne' }}, options, callback)
+
+        if(articleResult){
+            msg=await Article.findByIdAndRemove(articleResult._id, (err, article) => {
+                // As always, handle any potential errors:
+                if (err) return err;
+                // We'll create a simple object to send back with a message and the id of the document that was removed
+                // You can really do this however you want, though.
+                const response = {
+                    message: "Article successfully deleted",
+                    id: articleResult._id
+                };
+                //return response;
+            });//(err,article)            
+        }//if
+          
+        console.log("IM HERREE--> Line 101", msg);
+
+        let article=new Article(req.body);
+        article.userId=req.user._id;
+
+        article.save(function(err){
+            if(err){ throw err }
+            res.json({success:true})     
+            
+        });//article save
+             
+
+    });//app.post(/article-edit)
 
     app.post('/update',isLoggedIn,function(req,res){
         console.log('update',req.body,req.user);
