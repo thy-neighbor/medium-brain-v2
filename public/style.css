@@ -49,3 +49,41 @@ header{
         height: 175px;
     }
   }
+
+#landing-home{
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+
+/* Centered text */
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0, 0, 0.6);
+    padding:5px;
+    margin:5px;
+    border:solid rgb(241, 240, 174) 0.7px;
+}
+
+.centered:hover{
+    border:solid rgb(230, 227, 78) 0.7px;
+}
+
+.centered-inner > p{
+    font-size: 19px;
+}
+
+.centered-inner{
+    padding:10px;
+    margin:5px;
+}
+
+.fake-footer{
+    padding-bottom: 70px;
+}
+
+

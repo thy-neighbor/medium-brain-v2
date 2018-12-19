@@ -242,7 +242,7 @@ module.exports = function(app, passport) {
 // normal routes ===============================================================
     // show the home page (will also have our login links)
     app.get('/', function(req, res) {
-        res.render('login.hbs');
+        res.render('landing.hbs');
     });
 
     app.get('/profile-home', isLoggedIn ,function(req,res){
@@ -359,9 +359,7 @@ module.exports = function(app, passport) {
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
-    res.redirect('/');
+    res.redirect('/login');
 }
 
 
-//mobile menu 
-//css
