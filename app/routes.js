@@ -7,9 +7,9 @@ var cheerio = require('cheerio');
 
 
 module.exports = function(app, passport) {
-    //get the results from medium.com's search
+    //get the results from medium.com's search, a query is NEEDED
     app.get('/medium', isLoggedIn, async function(req,res){ 
-        console.log(req.query, req.params);
+        //console.log(req.query, req.params);
         
         
         let articles=await Article.find({
@@ -186,7 +186,7 @@ module.exports = function(app, passport) {
             }
         });
 
-        console.log("ARTICLE ID: IF FOUND IS-->",articleResult);
+        //console.log("ARTICLE ID: IF FOUND IS-->",articleResult);
 
         
 
@@ -282,12 +282,15 @@ module.exports = function(app, passport) {
         app.get('/login', function(req, res) {
             res.render('login.hbs', { message: req.flash('loginMessage') });
         });
+        
         // process the login form
         app.post('/login', passport.authenticate('local-login', {
             successRedirect : '/profile-home', // redirect to the secure profile section
-            failureRedirect : '/login', // redirect back to the signup page if there is an error
+            failureRedirect : '/login', // redirect back to the login page if there is an error
             failureFlash : true // allow flash messages
         }));
+        
+
         // SIGNUP =================================
         // show the signup form
         app.get('/signup', function(req, res) {
@@ -342,8 +345,8 @@ module.exports = function(app, passport) {
         var user            = req.user;
         user.local.email    = undefined;
         user.local.password = undefined;
-        user.save(function(err) {
-            res.redirect('/profile');
+        user.remove(function(err) {
+            res.redirect('/login');
         });
     });
     // google ---------------------------------
@@ -355,9 +358,13 @@ module.exports = function(app, passport) {
         });
     });
 };
-// route middleware to ensure user is logged in
+// route middleware to ensure user is logged in using passport
 function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated())
+    //console.log(req.referer);
+    let test = false; 
+    //if(req.referer==undefined)
+        //test = true;
+    if (req.isAuthenticated()||test)//req.test used for testing if i can manage that
         return next();
     res.redirect('/login');
 }

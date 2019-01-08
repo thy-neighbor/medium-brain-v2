@@ -18,6 +18,8 @@ var configDB = require('./config/database.js');
 
 var path = require('path');
 
+let server;
+
 // configuration ===============================================================
 mongoose.connect(configDB.url); // connect to our database
 
@@ -47,7 +49,40 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 // launch ======================================================================
-app.listen(port);
-console.log('The magic happens on port ' + port);
+//app.listen(port);
+//console.log('The magic happens on port ' + port);
+
+function runServer() {
+    return new Promise((resolve, reject) => {
+        server = app
+        .listen(port, () => {
+            console.log('The magic happens on port ' + port);
+            resolve(server);
+        })
+        .on("error", err => {
+            reject(err);
+        });
+    });
+}
+
+function closeServer() {
+    return new Promise((resolve, reject) => {
+      console.log("Closing server");
+      server.close(err => {
+        if (err) {
+          reject(err);
+          // so we don't also call `resolve()`
+          return;
+        }
+        resolve();
+      });
+    });
+}
+
+if(require.main === module){
+    runServer().catch(err => console.error(err));
+}
+
+module.exports = { app, runServer, closeServer };
 
 
