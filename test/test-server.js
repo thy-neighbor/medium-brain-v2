@@ -1,3 +1,8 @@
+//=============================================================================
+// TESTING =============================================================
+// =============================================================================
+// Tested each endpoint that supports a currently functional feature (google oauth connect not available) using cheerio to check to see webpages loaded, and status codes for posting, deleting, changing articles. 
+
 const chai= require("chai");
 const chaiHttp = require("chai-http");
 const Article= require('../app/models/article');
