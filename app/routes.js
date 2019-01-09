@@ -19,7 +19,7 @@ module.exports = function(app, passport) {
         request(`https://medium.com/search?q=${req.query.q}`, async function(err, resp, html) {
         console.log("ERROR",err);
             if (!err){
-                const $ = cheerio.load(html);
+                const $ = await cheerio.load(html);
                 
                 
                 let temp=$('.postArticle-content').append(`<br>
@@ -32,6 +32,8 @@ module.exports = function(app, passport) {
                 res.render('medium.hbs', {
                     html:section
                 });
+            }else{
+                console.log(`Error @: https://medium.com/search?q=${req.query.q}`);
             }
        });           
 
@@ -97,12 +99,13 @@ module.exports = function(app, passport) {
 
     //redirects with the query for the medium article search
     app.post('/medium',isLoggedIn,function(req,res){
+        console.log(`/medium?q=${req.body.q}`);
         res.redirect(`/medium?q=${req.body.q}`);
     });
 
     //Saving article from search list(checks to see if article was saved previously, if so deletes then rewrites)
     app.post('/article',isLoggedIn,async function(req,res){
-        console.log('article',req.body,req.user);
+        //console.log('article',req.body,req.user);
 
         let msg="";
 
@@ -132,14 +135,16 @@ module.exports = function(app, passport) {
             });//(err,article)            
         }//if
           
-        console.log("IM HERREE--> Line 134", msg);
+        console.log("IM HERREE--> Line 138", msg);
 
 
         let article=new Article(req.body);
         article.userId=req.user._id;
 
+        
         var promise= new Promise(function(resolve,reject){
             if(article.edit==0){
+                
                 request(`${req.body.articleUrl}`, async function(err, resp, html) {
                     console.log('ERROR',err);
                     if (!err){
@@ -150,7 +155,7 @@ module.exports = function(app, passport) {
                         $(".postArticle-content").attr("contenteditable","true");
                         article.articleContent= await $('.postArticle-content').html();
                         
-                        console.log('SAVED THIS INTO ARTICLECONTENT',article.articleContent);
+                        //console.log('SAVED THIS INTO ARTICLECONTENT',article.articleContent);
                         resolve(1);
                     }//if
                 });//request            
@@ -158,7 +163,7 @@ module.exports = function(app, passport) {
             
             
         }).then(function(response){
-            console.log('SAVED THIS INTO ARTICLECONTENT OUSSIDE',article.articleContent);
+            //console.log('SAVED THIS INTO ARTICLECONTENT OUSSIDE',article.articleContent);
 
             article.save(function(err){
                 if(err){ throw err }
