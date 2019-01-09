@@ -17,7 +17,7 @@ module.exports = function(app, passport) {
         }).exec();
       
         request(`https://medium.com/search?q=${req.query.q}`, async function(err, resp, html) {
-        console.log("ERROR",err);
+        //console.log("ERROR",err);
             if (!err){
                 const $ = await cheerio.load(html);
                 
@@ -41,12 +41,12 @@ module.exports = function(app, passport) {
 
     //article editing page, render what is saved in user's database
     app.get('/article-edit',isLoggedIn, function(req,res){
-        console.log("IM HERREE",req.query.q);
+        //console.log("IM HERREE",req.query.q);
         //check if theres already content for this article
         //if s load that content
         //else do the request below
         request(`${req.query.q}`, async function(err, resp, html) {
-            console.log('ERROR',err);
+            //console.log('ERROR',err);
             if (!err){
                 
                 const $ = cheerio.load(html);
@@ -55,7 +55,7 @@ module.exports = function(app, passport) {
 
                 let tempBody=$('.postArticle-content').html();
 
-                console.log('ALL OF THAT GOOD CONTENT',header, headerImg);
+                //console.log('ALL OF THAT GOOD CONTENT',header, headerImg);
                 
                 $.html();
                 res.render('article-edit.hbs', {
@@ -79,13 +79,13 @@ module.exports = function(app, passport) {
         let articles=await Article.find({
             userId:req.user._id
         }).exec();
-
+        
         let tempBody=await articles.find(function(item){
             if(item.articleUrl==req.query.q){
                 return item;
             }
         });
-
+        
         console.log("GOOD CONTENT",tempBody.articleContent);
             
         res.render('article-edit.hbs', {
@@ -99,7 +99,7 @@ module.exports = function(app, passport) {
 
     //redirects with the query for the medium article search
     app.post('/medium',isLoggedIn,function(req,res){
-        console.log(`/medium?q=${req.body.q}`);
+        //console.log(`/medium?q=${req.body.q}`);
         res.redirect(`/medium?q=${req.body.q}`);
     });
 
@@ -119,7 +119,7 @@ module.exports = function(app, passport) {
             }
         });
 
-        console.log("ARTICLE ID: IF FOUND IS-->",articleResult);
+        //console.log("ARTICLE ID: IF FOUND IS-->",articleResult);
 
         if(articleResult){
             msg=await Article.findByIdAndRemove(articleResult._id, (err, article) => {
@@ -135,7 +135,7 @@ module.exports = function(app, passport) {
             });//(err,article)            
         }//if
           
-        console.log("IM HERREE--> Line 138", msg);
+        //console.log("IM HERREE--> Line 138", msg);
 
 
         let article=new Article(req.body);
@@ -146,7 +146,7 @@ module.exports = function(app, passport) {
             if(article.edit==0){
                 
                 request(`${req.body.articleUrl}`, async function(err, resp, html) {
-                    console.log('ERROR',err);
+                    //console.log('ERROR',err);
                     if (!err){
                         
                         const $ = cheerio.load(html);
@@ -177,7 +177,7 @@ module.exports = function(app, passport) {
 
     //saves edited articles, with delete if found in database, then rewrite method
     app.post("/article-edit", isLoggedIn, async function(req,res){
-        console.log('article-edit', req.body, req.user);
+        //console.log('article-edit', req.body, req.user);
 
         let msg="";
 
@@ -208,7 +208,7 @@ module.exports = function(app, passport) {
             });//(err,article)            
         }//if
           
-        console.log("IM HERREE--> Line 101", msg);
+        //console.log("IM HERREE--> Line 101", msg);
 
         let article=new Article(req.body);
         article.userId=req.user._id;
@@ -252,7 +252,7 @@ module.exports = function(app, passport) {
 
     app.get('/profile-home', isLoggedIn ,function(req,res){
         Article.find({userId:req.user._id}).then(articles=>{
-            console.log(articles);
+            //console.log(articles);
             res.render('profile-home.hbs', {
                 user : req.user,
                 articles:articles
