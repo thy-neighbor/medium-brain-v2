@@ -4,7 +4,7 @@ A personalized wikipedia version of medium where a user can save their selected
 articles and edit them as they please
 
 
-## Testing
+## Live Demo
 
 Weblink:
 https://medium-wiki-brainless.herokuapp.com/
@@ -28,6 +28,21 @@ In your terminal go to the root folder directory and use npm test
 * Thinkful Mentors
 * My Mom
 * Cheerio.js for making my dreams come true
+
+
+
+## Technology Used
+
+#### HTML
+#### CSS
+#### JavaScript
+#### jQuery
+#### NodeJs
+#### Express
+#### Passport
+#### Mongo
+#### Handlebars
+
 
 
 
